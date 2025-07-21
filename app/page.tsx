@@ -3,6 +3,7 @@
 import { useState } from "react"
 import Image from "next/image"
 import { ChevronUp, ChevronDown } from "lucide-react"
+import MembersPage from "./members/page" // Importa el componente MembersPage
 
 const timelineEvents = [
   {
@@ -60,7 +61,9 @@ export default function HomePage() {
   }
 
   return (
-    <div className="flex flex-col w-full h-full">
+    <div className="flex flex-col w-full">
+      {" "}
+      {/* Eliminado h-full para que se adapte al contenido */}
       {/* Primera Sección: Hero con imagen de fondo y nombre de la banda */}
       <section className="relative flex items-center justify-center w-full min-h-[calc(100vh-8rem)] bg-retro-black text-retro-white overflow-hidden">
         <Image
@@ -73,15 +76,14 @@ export default function HomePage() {
           priority={true}
         />
         <div className="absolute inset-0 bg-black/30" /> {/* Overlay oscuro para mejor contraste */}
-        <h1 className="relative z-10 text-center text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-extrabold uppercase tracking-wider drop-shadow-lg">
+        <h1 className="relative z-10 text-center text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-extrabold uppercase tracking-wider drop-shadow-lg break-words">
           Ansiedad Caramelizada
         </h1>
       </section>
-
       {/* Segunda Sección: Línea de tiempo */}
       <section className="relative w-full flex-1 flex flex-col md:flex-row bg-retro-white text-retro-black overflow-hidden min-h-[calc(100vh-8rem)]">
-        {/* Top Left: History in the making - Oculto en móvil, visible en sm+ */}
-        <div className="absolute top-4 left-4 sm:top-8 sm:left-8 z-20 text-sm sm:text-base font-bold hidden sm:block">
+        {/* Top Left: History in the making - Centrado y con más presencia en PC */}
+        <div className="absolute top-8 left-1/2 -translate-x-1/2 z-20 text-sm sm:text-base md:text-xl lg:text-2xl font-bold text-retro-black hidden sm:block">
           Historia en construcción
         </div>
         {/* Bottom Left: Est. 1985 - Oculto en móvil, visible en sm+ */}
@@ -158,10 +160,10 @@ export default function HomePage() {
           {/* Navigation Arrows - Posicionado dentro de la columna de contenido */}
           <div className="absolute left-4 sm:left-8 top-1/2 -translate-y-1/2 flex flex-col space-y-2 z-20">
             <button onClick={goToPrev} className="retro-button p-1 sm:p-2">
-              <ChevronUp className="w-4 h-4 sm:w-6 sm:h-6" />
+              <ChevronUp className="w-4 h-4 sm:w-6 h-6" />
             </button>
             <button onClick={goToNext} className="retro-button p-1 sm:p-2">
-              <ChevronDown className="w-4 h-4 sm:w-6 sm:h-6" />
+              <ChevronDown className="w-4 h-4 sm:w-6 h-6" />
             </button>
           </div>
           {/* Contenido de texto */}
@@ -171,6 +173,8 @@ export default function HomePage() {
           </div>
         </div>
       </section>
+      {/* Tercera Sección: Miembros */}
+      <MembersPage />
     </div>
   )
 }

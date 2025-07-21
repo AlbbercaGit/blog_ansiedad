@@ -20,7 +20,7 @@ const members = [
   {
     name: "Nito",
     description:
-      "Nito es la fuerza rítmica implacable, el baterista que marca el pulso de la ansiedad. Su estilo de percusión, una mezcla de ritmos mecánicos y explosiones orgánicas, es el ancla que mantiene a la banda en tierra mientras exploran los abismos sonoros. Cada golpe es una declaración, cada ritmo una pulsación de la desesperación colectiva.",
+      "Nito es el arquitecto sonoro, el maestro de los sintetizadores y las texturas atmosféricas que definen el sonido de Ansiedad Caramelizada. Con sus máquinas analógicas, crea paisajes sonoros fríos y envolventes que transportan al oyente a un universo de sombras y luces tenues. Su precisión y experimentación son el corazón electrónico de la banda.",
     imageUrl: "https://ycjspxiu10ouz3ju.public.blob.vercel-storage.com/nito", // Placeholder para Nito
     social: {
       facebook: "#",
@@ -31,7 +31,7 @@ const members = [
   {
     name: "Lonso",
     description:
-      "Lonso es el latido sombrío que habita bajo cada canción, el bajista que traza las líneas invisibles entre el caos y el control. Su bajo no solo acompaña: habla, gruñe, arrastra. Con un sonido denso y arrastrado, sostiene el peso emocional de la banda como una columna vertebral de niebla y cemento. Sus líneas se arrastran como espectros, envolviendo cada tema en una tensión que nunca se resuelve del todo.",
+      "Lonso es la fuerza rítmica implacable, el baterista que marca el pulso de la ansiedad. Su estilo de percusión, una mezcla de ritmos mecánicos y explosiones orgánicas, es el ancla que mantiene a la banda en tierra mientras exploran los abismos sonoros. Cada golpe es una declaración, cada ritmo una pulsación de la desesperación colectiva.",
     imageUrl: "https://ycjspxiu10ouz3ju.public.blob.vercel-storage.com/lonso", // Placeholder para Lonso
     social: {
       facebook: "#",
@@ -58,10 +58,10 @@ export default function MembersPage() {
   }
 
   return (
-    <div className="flex flex-col w-full h-[calc(100vh-8rem)] bg-retro-dark-bg text-retro-light-text overflow-hidden">
+    <div className="flex flex-col w-full min-h-[calc(100vh-8rem)] bg-retro-dark-bg text-retro-light-text overflow-hidden">
       <section className="flex-1 flex flex-col md:flex-row items-center justify-center p-8 md:p-16 lg:p-24 relative h-full">
         {/* Text Content (Left Column on Desktop, Top on Mobile) */}
-        <div className="relative z-10 flex flex-col items-center md:items-start text-center md:text-left md:w-1/2 md:pr-8 lg:pr-16 mb-8 md:mb-0">
+        <div className="relative z-10 flex flex-col items-center md:items-start text-center md:text-left md:w-1/2 md:pr-8 lg:pr-16 mb-8 md:mb-0 w-full">
           <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold mb-4 leading-tight">
             {currentMember.name}
           </h1>
@@ -102,48 +102,45 @@ export default function MembersPage() {
         {/* Image Content (Right Column on Desktop, Bottom on Mobile) */}
         <div className="relative w-full md:w-1/2 aspect-[3/4] md:aspect-[2/3] lg:aspect-[3/4] flex items-center justify-center overflow-hidden">
           {members.map((member, index) => (
-            <div
+            <Image
               key={member.name}
-              className={`absolute inset-0 m-auto w-[80%] h-[80%] transition-opacity duration-500 ease-in-out ${
+              src={member.imageUrl || "/placeholder.svg"}
+              alt={member.name}
+              fill
+              sizes="(max-width: 768px) 100vw, 50vw"
+              style={{
+                objectFit: "cover",
+                objectPosition: "center",
+                maskImage: "radial-gradient(ellipse at center, black 0%, black 30%, transparent 100%)",
+                WebkitMaskImage: "radial-gradient(ellipse at center, black 0%, black 30%, transparent 100%)",
+                maskSize: "100% 100%",
+                WebkitMaskSize: "100% 100%",
+                maskPosition: "center",
+                WebkitMaskPosition: "center",
+              }}
+              className={`absolute transition-opacity duration-300 ease-in-out ${
+                /* Reducida la duración de la transición */
                 index === currentMemberIndex ? "opacity-100" : "opacity-0"
               }`}
-            >
-              <Image
-                src={member.imageUrl || "/placeholder.svg"}
-                alt={member.name}
-                fill
-                sizes="(max-width: 768px) 100vw, 50vw"
-                style={{
-                  objectFit: "cover",
-                  objectPosition: "center",
-                  maskImage: "radial-gradient(ellipse at center, black 0%, black 30%, transparent 100%)",
-                  WebkitMaskImage: "radial-gradient(ellipse at center, black 0%, black 30%, transparent 100%)",
-                  maskSize: "100% 100%", // Revertido a 100% para que la máscara cubra la imagen al 80%
-                  WebkitMaskSize: "100% 100%", // Revertido a 100%
-                  maskPosition: "center",
-                  WebkitMaskPosition: "center",
-                }}
-                priority={index === currentMemberIndex}
-              />
-            </div>
+              priority={index === currentMemberIndex}
+            />
           ))}
+          {/* Navigation Arrows for Mobile and Desktop */}
+          <button
+            onClick={goToPrevMember}
+            className="absolute left-4 top-1/2 -translate-y-1/2 z-30 retro-button p-2 dark-theme pointer-events-auto"
+            aria-label="Previous member"
+          >
+            <ChevronLeft className="w-6 h-6" />
+          </button>
+          <button
+            onClick={goToNextMember}
+            className="absolute right-4 top-1/2 -translate-y-1/2 z-30 retro-button p-2 dark-theme pointer-events-auto"
+            aria-label="Next member"
+          >
+            <ChevronRight className="w-6 h-6" />
+          </button>
         </div>
-
-        {/* Navigation Arrows */}
-        <button
-          onClick={goToPrevMember}
-          className="absolute left-4 top-1/2 -translate-y-1/2 z-20 retro-button p-2 dark-theme hidden md:block" // Oculto en móvil, visible en md+
-          aria-label="Previous member"
-        >
-          <ChevronLeft className="w-6 h-6" />
-        </button>
-        <button
-          onClick={goToNextMember}
-          className="absolute right-4 top-1/2 -translate-y-1/2 z-20 retro-button p-2 dark-theme hidden md:block" // Oculto en móvil, visible en md+
-          aria-label="Next member"
-        >
-          <ChevronRight className="w-6 h-6" />
-        </button>
       </section>
 
       {/* Pagination Dots */}

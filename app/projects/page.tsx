@@ -52,7 +52,7 @@ export default function ProjectsPage() {
           slug="colaboracion-despojos"
           imageUrl="/placeholder.svg?height=225&width=400"
           imageAlt="Colaboración con 'Los Despojos'"
-          description="Un encuentro explosivo con otra banda local, fusionando nuestros sonidos en una noche inolvidable."
+          description="Un encuentro explosivo con otra banda local, fusionando nuestros sonidos en una noche inolvidable-."
         />
       </div>
     </div>

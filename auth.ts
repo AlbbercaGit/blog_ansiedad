@@ -10,23 +10,26 @@ import type { DefaultSession } from "next-auth"
 if (!process.env.NEXTAUTH_SECRET) {
   throw new Error("NEXTAUTH_SECRET is not set. Please set it in your .env.local file or Vercel environment variables.")
 }
-if (!process.env.SUPABASE_URL) {
-  throw new Error(
-    "SUPABASE_URL no está definida. Añade SUPABASE_URL en tu .env.local o en las variables de entorno de Vercel.",
-  )
-}
-if (!process.env.SUPABASE_SERVICE_ROLE_KEY) {
-  throw new Error(
-    "SUPABASE_SERVICE_ROLE_KEY no está definida. Añade SUPABASE_SERVICE_ROLE_KEY en tu .env.local o en las variables de entorno de Vercel.",
+
+// Para el build, permitir que las variables de Supabase sean opcionales
+const supabaseUrl = process.env.SUPABASE_URL
+const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY
+
+if ((!supabaseUrl || !supabaseServiceKey) && process.env.NODE_ENV !== 'production') {
+  console.warn(
+    "Supabase variables not found. Authentication will not work properly. " +
+    "Please set SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY in your .env.local file."
   )
 }
 
 // ---------------------------------------------------------------------------
 // Ahora sí se puede inicializar el cliente con seguridad
 // ---------------------------------------------------------------------------
-const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_SERVICE_ROLE_KEY, {
-  auth: { persistSession: false },
-})
+const supabase = supabaseUrl && supabaseServiceKey 
+  ? createClient(supabaseUrl, supabaseServiceKey, {
+      auth: { persistSession: false },
+    })
+  : null
 
 export const {
   handlers,
@@ -34,10 +37,12 @@ export const {
   signIn,
   signOut,
 } = NextAuth({
-  adapter: SupabaseAdapter({
-    url: process.env.SUPABASE_URL!,
-    secret: process.env.SUPABASE_SERVICE_ROLE_KEY!, // Esto es para el adaptador de Supabase
-  }),
+  adapter: supabaseUrl && supabaseServiceKey 
+    ? SupabaseAdapter({
+        url: supabaseUrl,
+        secret: supabaseServiceKey,
+      })
+    : undefined,
   providers: [
     Credentials({
       name: "Credentials",
@@ -47,6 +52,11 @@ export const {
       },
       async authorize(credentials) {
         if (!credentials?.email || !credentials?.password) {
+          return null
+        }
+
+        if (!supabase) {
+          console.error("Supabase client not initialized")
           return null
         }
 
@@ -98,7 +108,7 @@ export const {
     async session({ session, token }) {
       if (session.user) {
         session.user.id = token.id as string
-        session.user.email = token.email
+        session.user.email = token.email || ""
         session.user.is_admin = token.is_admin as boolean
       }
       return session
@@ -121,15 +131,6 @@ declare module "next-auth" {
   }
 
   interface User {
-    is_admin: boolean
-  }
-}
-
-// Extiende el tipo de JWT para incluir is_admin
-declare module "next-auth/jwt" {
-  interface JWT {
-    id: string
-    email: string
     is_admin: boolean
   }
 }

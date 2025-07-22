@@ -2,8 +2,10 @@
 
 import { useState } from "react"
 import Image from "next/image"
-import { ChevronUp, ChevronDown } from "lucide-react"
+import { ChevronUp, ChevronDown, Facebook, Twitter, Instagram, ChevronLeft, ChevronRight } from "lucide-react"
 import MembersPage from "./members/page" // Importa el componente MembersPage
+import Link from "next/link" // Importar Link para los enlaces sociales
+import { ProjectCard } from "@/components/project-card" // Importar ProjectCard
 
 const timelineEvents = [
   {
@@ -48,6 +50,107 @@ const timelineEvents = [
   },
 ]
 
+const musicalStyleSections = [
+  {
+    title: "Sonido",
+    description:
+      "El sonido de Ansiedad Caramelizada se caracteriza por sus guitarras reverberadas y afiladas, líneas de bajo hipnóticas y pulsantes, baterías mecánicas y frías, y sintetizadores atmosféricos que construyen paisajes sonoros densos y envolventes. La voz, a menudo distante y cargada de emoción, se funde con la instrumentación para crear una experiencia inmersiva. La producción busca una crudeza lo-fi que evoca la era analógica.",
+    imageUrl: "https://ycjspxiu10ouz3ju.public.blob.vercel-storage.com/guitar", // Imagen de la guitarra proporcionada
+    imageAlt: "Guitarra retro en blanco y negro",
+    social: {
+      facebook: "#",
+      twitter: "#",
+      instagram: "#",
+    },
+  },
+  {
+    title: "Letras",
+    description:
+      "Las letras de Ansiedad Caramelizada son un espejo de la melancolía urbana y la introspección existencial. Abordamos temas como la alienación, la búsqueda de identidad en un mundo en constante cambio, y la belleza encontrada en la desolación. Cada verso es un grito ahogado, una reflexión sobre la fragilidad humana y la resistencia del espíritu. Nos inspiramos en la poesía oscura, el cine noir y las calles grises de la ciudad.",
+    imageUrl: "https://ycjspxiu10ouz3ju.public.blob.vercel-storage.com/live2", // Imagen de live2
+    imageAlt: "Máquina de escribir vintage",
+    social: null,
+  },
+  {
+    title: "Referencias",
+    description:
+      "Nuestra música es un crisol de influencias que van desde el post-punk británico de los 80 (Joy Division, The Cure, Siouxsie and the Banshees) hasta el krautrock experimental (Can, Neu!) y la new wave más oscura. También bebemos de la literatura de Camus y Kafka, y de la estética visual de películas como Blade Runner y Eraserhead. Buscamos crear un sonido que sea a la vez familiar y extrañamente nuevo.",
+    imageUrl: "https://ycjspxiu10ouz3ju.public.blob.vercel-storage.com/live", // Imagen de live
+    imageAlt: "Discos de vinilo vintage",
+    social: null,
+  },
+  {
+    title: "Directo",
+    description:
+      "Nuestros conciertos son más que una simple actuación; son un ritual catártico. La iluminación tenue, el humo denso y las proyecciones abstractas crean una atmósfera inmersiva que transporta al público a nuestro universo sonoro. La energía en el escenario es cruda y visceral, invitando a la audiencia a perderse en el ritmo y la emoción. Cada directo es una oportunidad para conectar y liberar la ansiedad colectiva.",
+    imageUrl: "https://ycjspxiu10ouz3ju.public.blob.vercel-storage.com/live2", // Reutilizando live2
+    imageAlt: "Concierto de banda con luces de escenario",
+    social: null,
+  },
+]
+
+// Datos de ejemplo para el blog
+const blogPosts = [
+  {
+    slug: "post-1",
+    title: "El Origen del Ruido: Nuestros Primeros Días",
+    imageUrl: "/placeholder.svg?height=225&width=400&text=Blog+Post+1",
+    imageAlt: "Primeros días de la banda",
+    description: "Un viaje a los inicios de Ansiedad Caramelizada, desde el sótano hasta el primer ensayo.",
+    date: "2024-01-15",
+  },
+  {
+    slug: "post-2",
+    title: "Detrás de 'Ecos del Vacío': El Proceso Creativo",
+    imageUrl: "/placeholder.svg?height=225&width=400&text=Blog+Post+2",
+    imageAlt: "Proceso de grabación del EP",
+    description: "Exploramos la inspiración y los desafíos detrás de la creación de nuestro EP debut.",
+    date: "2024-02-20",
+  },
+  {
+    slug: "post-3",
+    title: "La Gira 'Sombras Urbanas': Anécdotas y Reflexiones",
+    imageUrl: "/placeholder.svg?height=225&width=400&text=Blog+Post+3",
+    imageAlt: "Anécdotas de la gira",
+    description: "Historias de la carretera, encuentros inesperados y la energía de nuestros primeros conciertos.",
+    date: "2024-03-10",
+  },
+  {
+    slug: "post-4",
+    title: "El Arte de la Distorsión: Nuestro Sonido Característico",
+    imageUrl: "/placeholder.svg?height=225&width=400&text=Blog+Post+4",
+    imageAlt: "Equipo de sonido vintage",
+    description: "Un análisis profundo de los elementos que definen el sonido único de Ansiedad Caramelizada.",
+    date: "2024-04-05",
+  },
+  {
+    slug: "post-5",
+    title: "Influencias Ocultas: Lo que Nos Inspira Más Allá del Post-Punk",
+    imageUrl: "/placeholder.svg?height=225&width=400&text=Blog+Post+5",
+    imageAlt: "Libros y discos inspiradores",
+    description: "Descubre las referencias inesperadas que nutren nuestra creatividad musical y lírica.",
+    date: "2024-05-01",
+  },
+  {
+    slug: "post-6",
+    title: "El Escenario es Nuestro Templo: La Experiencia en Vivo",
+    imageUrl: "/placeholder.svg?height=225&width=400&text=Blog+Post+6",
+    imageAlt: "Concierto en vivo",
+    description: "Cómo transformamos cada concierto en un ritual catártico y una experiencia inolvidable.",
+    date: "2024-06-12",
+  },
+  {
+    slug: "post-7",
+    title: "Nuevos Horizontes: Explorando Sonidos Futuros",
+    imageUrl: "/placeholder.svg?height=225&width=400&text=Blog+Post+7",
+    imageAlt: "Estudio de grabación moderno",
+    description: "Un vistazo a lo que se viene: nuevas experimentaciones y la evolución de nuestro sonido.",
+    date: "2024-07-01",
+  },
+]
+
+const POSTS_PER_PAGE = 5
+
 export default function HomePage() {
   const [currentEventIndex, setCurrentEventIndex] = useState(0)
   const currentEvent = timelineEvents[currentEventIndex]
@@ -60,10 +163,41 @@ export default function HomePage() {
     setCurrentEventIndex((prevIndex) => (prevIndex - 1 + timelineEvents.length) % timelineEvents.length)
   }
 
+  const [currentStyleIndex, setCurrentStyleIndex] = useState(0)
+  const currentStyle = musicalStyleSections[currentStyleIndex]
+
+  const goToStyle = (index: number) => {
+    setCurrentStyleIndex(index)
+  }
+
+  const goToNextStyle = () => {
+    setCurrentStyleIndex((prevIndex) => (prevIndex + 1) % musicalStyleSections.length)
+  }
+
+  const goToPrevStyle = () => {
+    setCurrentStyleIndex((prevIndex) => (prevIndex - 1 + musicalStyleSections.length) % musicalStyleSections.length)
+  }
+
+  // Lógica de paginación para el blog
+  const [currentPage, setCurrentPage] = useState(1)
+  const totalPages = Math.ceil(blogPosts.length / POSTS_PER_PAGE)
+
+  const indexOfLastPost = currentPage * POSTS_PER_PAGE
+  const indexOfFirstPost = indexOfLastPost - POSTS_PER_PAGE
+  const currentPosts = blogPosts.slice(indexOfFirstPost, indexOfLastPost)
+
+  const paginate = (pageNumber: number) => setCurrentPage(pageNumber)
+
+  const goToNextBlogPage = () => {
+    setCurrentPage((prevPage) => Math.min(prevPage + 1, totalPages))
+  }
+
+  const goToPrevBlogPage = () => {
+    setCurrentPage((prevPage) => Math.max(prevPage - 1, 1))
+  }
+
   return (
     <div className="flex flex-col w-full">
-      {" "}
-      {/* Eliminado h-full para que se adapte al contenido */}
       {/* Primera Sección: Hero con imagen de fondo y nombre de la banda */}
       <section className="relative flex items-center justify-center w-full min-h-[calc(100vh-8rem)] bg-retro-black text-retro-white overflow-hidden">
         <Image
@@ -101,7 +235,7 @@ export default function HomePage() {
                 className={`absolute font-extrabold transition-all duration-500 ease-in-out select-none pointer-events-none`}
                 style={{
                   opacity: index === currentEventIndex ? 1 : 0.1,
-                  fontSize: index === currentEventIndex ? "8rem" : "4rem", // Tamaños de fuente ajustados para escritorio
+                  fontSize: index === currentEventIndex ? "6rem" : "3rem", // Tamaños de fuente ajustados para escritorio
                   color: index === currentEventIndex ? "#000000" : "#999999",
                   left: "50%",
                   top: "50%",
@@ -124,7 +258,7 @@ export default function HomePage() {
                 className={`absolute font-extrabold transition-opacity duration-500 ease-in-out transition-transform duration-500 ease-in-out select-none`}
                 style={{
                   opacity: index === currentEventIndex ? 0.05 : 0, // Opacidad 0 para no-actual, 0.05 para actual
-                  fontSize: index === currentEventIndex ? "4rem" : "2rem", // Tamaños de fuente ajustados para móvil
+                  fontSize: index === currentEventIndex ? "3rem" : "1.5rem", // Tamaños de fuente ajustados para móvil
                   color: index === currentEventIndex ? "#000000" : "#999999",
                   left: "50%",
                   top: "50%",
@@ -157,24 +291,181 @@ export default function HomePage() {
               />
             ))}
           </div>
-          {/* Navigation Arrows - Posicionado dentro de la columna de contenido */}
-          <div className="absolute left-4 sm:left-8 top-1/2 -translate-y-1/2 flex flex-col space-y-2 z-20">
-            <button onClick={goToPrev} className="retro-button p-1 sm:p-2">
-              <ChevronUp className="w-4 h-4 sm:w-6 h-6" />
-            </button>
-            <button onClick={goToNext} className="retro-button p-1 sm:p-2">
-              <ChevronDown className="w-4 h-4 sm:w-6 h-6" />
-            </button>
-          </div>
           {/* Contenido de texto */}
           <div className="w-full flex flex-col justify-center text-center md:text-left flex-1">
             <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold mb-2 sm:mb-4">{currentEvent.title}</h2>
             <p className="text-sm sm:text-base lg:text-lg text-retro-black">{currentEvent.description}</p>
           </div>
         </div>
+        {/* Navigation Arrows - Posicionado fuera de la columna de contenido */}
+        <div className="absolute left-4 sm:left-8 top-1/2 -translate-y-1/2 flex flex-col space-y-2 z-30">
+          <button onClick={goToPrev} className="retro-button p-1 sm:p-2">
+            <ChevronUp className="w-4 h-4 sm:w-6 h-6" />
+          </button>
+          <button onClick={goToNext} className="retro-button p-1 sm:p-2">
+            <ChevronDown className="w-4 h-4 sm:w-6 h-6" />
+          </button>
+        </div>
       </section>
       {/* Tercera Sección: Miembros */}
       <MembersPage />
+      {/* Cuarta Sección: Estilo Musical */}
+      <section className="relative flex flex-col w-full min-h-[calc(100vh-8rem)] bg-retro-dark-bg text-retro-light-text overflow-hidden">
+        <div className="flex-1 flex flex-col md:flex-row-reverse items-center justify-center p-8 md:p-16 lg:p-24 relative h-full">
+          {/* Text Content (Right Column on Desktop, Top on Mobile) */}
+          <div className="relative z-10 flex flex-col items-center md:items-start text-center md:text-left md:w-1/2 md:pl-8 lg:pl-16 mb-8 md:mb-0 w-full">
+            <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold mb-4 leading-tight font-serif">
+              {/* Añadido font-serif para un estilo diferenciador */}
+              {currentStyle.title}
+            </h1>
+            <p className="text-base sm:text-lg lg:text-xl mb-6 max-w-prose overflow-y-auto max-h-[40vh]">
+              {currentStyle.description}
+            </p>
+            {currentStyle.social && (
+              <div className="flex space-x-4">
+                <Link
+                  href={currentStyle.social.facebook}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-retro-light-text hover:text-retro-gray-light"
+                >
+                  <Facebook className="w-6 h-6" />
+                </Link>
+                <Link
+                  href={currentStyle.social.twitter}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-retro-light-text hover:text-retro-gray-light"
+                >
+                  <Twitter className="w-6 h-6" />
+                </Link>
+                <Link
+                  href={currentStyle.social.instagram}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-retro-light-text hover:text-retro-gray-light"
+                >
+                  <Instagram className="w-6 h-6" />
+                </Link>
+              </div>
+            )}
+          </div>
+
+          {/* Image Content (Left Column on Desktop, Bottom on Mobile) */}
+          <div className="relative w-full md:w-1/2 aspect-[3/4] md:aspect-[2/3] lg:aspect-[3/4] flex items-center justify-center overflow-hidden">
+            {musicalStyleSections.map((style, index) => (
+              <Image
+                key={style.title}
+                src={style.imageUrl || "/placeholder.svg"}
+                alt={style.imageAlt}
+                fill
+                sizes="(max-width: 768px) 100vw, 50vw"
+                style={{
+                  objectFit: "cover",
+                  objectPosition: "left", // Asegura que la imagen se vea bien en el lado izquierdo
+                  mixBlendMode: "screen", // Efecto diferenciador
+                }}
+                className={`absolute transition-opacity duration-300 ease-in-out ${
+                  index === currentStyleIndex ? "opacity-100" : "opacity-0"
+                }`}
+                priority={index === currentStyleIndex}
+              />
+            ))}
+            {/* Navigation Arrows for Mobile and Desktop - MOVIDOS AQUÍ */}
+            <button
+              onClick={goToPrevStyle}
+              className="absolute left-4 top-1/2 -translate-y-1/2 z-30 retro-button p-2 dark-theme pointer-events-auto"
+              aria-label="Previous style section"
+            >
+              <ChevronLeft className="w-6 h-6" />
+            </button>
+            <button
+              onClick={goToNextStyle}
+              className="absolute right-4 top-1/2 -translate-y-1/2 z-30 retro-button p-2 dark-theme pointer-events-auto"
+              aria-label="Next style section"
+            >
+              <ChevronRight className="w-6 h-6" />
+            </button>
+          </div>
+        </div>
+
+        {/* Pagination Dots */}
+        <div className="flex justify-center gap-2 py-4 bg-retro-dark-bg">
+          {musicalStyleSections.map((_, index) => (
+            <button
+              key={index}
+              onClick={() => goToStyle(index)}
+              className={`h-3 w-3 rounded-full transition-colors duration-300 ${
+                index === currentStyleIndex ? "bg-retro-light-text" : "bg-retro-accent-dot"
+              }`}
+              aria-label={`Go to style section ${index + 1}`}
+            />
+          ))}
+        </div>
+      </section>
+
+      {/* Quinta Sección: Blog */}
+      <section id="blog-section" className="w-full bg-retro-white text-retro-black p-8 md:p-16 lg:p-24">
+        <div className="grid gap-8">
+          <div className="grid gap-2 text-center">
+            <h1 className="text-3xl sm:text-4xl font-extrabold">Nuestro Blog</h1>
+            <p className="text-base sm:text-lg text-retro-gray-dark">
+              Historias, reflexiones y novedades de Ansiedad Caramelizada.
+            </p>
+          </div>
+
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+            {currentPosts.map((post) => (
+              <ProjectCard
+                key={post.slug}
+                title={post.title}
+                slug={post.slug}
+                imageUrl={post.imageUrl}
+                imageAlt={post.imageAlt}
+                description={post.description}
+              />
+            ))}
+          </div>
+
+          {/* Controles de Paginación */}
+          {totalPages > 1 && (
+            <div className="flex justify-center items-center gap-4 mt-8">
+              <button
+                onClick={goToPrevBlogPage}
+                disabled={currentPage === 1}
+                className="retro-button p-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                aria-label="Página anterior"
+              >
+                <ChevronLeft className="w-5 h-5" />
+              </button>
+              <div className="flex gap-2">
+                {Array.from({ length: totalPages }, (_, i) => (
+                  <button
+                    key={i + 1}
+                    onClick={() => paginate(i + 1)}
+                    className={`h-8 w-8 rounded-full flex items-center justify-center text-sm font-bold transition-colors duration-300 ${
+                      currentPage === i + 1
+                        ? "bg-retro-black text-retro-white"
+                        : "bg-retro-gray-light text-retro-black hover:bg-retro-gray-medium"
+                    }`}
+                    aria-label={`Ir a la página ${i + 1}`}
+                  >
+                    {i + 1}
+                  </button>
+                ))}
+              </div>
+              <button
+                onClick={goToNextBlogPage}
+                disabled={currentPage === totalPages}
+                className="retro-button p-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                aria-label="Página siguiente"
+              >
+                <ChevronRight className="w-5 h-5" />
+              </button>
+            </div>
+          )}
+        </div>
+      </section>
     </div>
   )
 }

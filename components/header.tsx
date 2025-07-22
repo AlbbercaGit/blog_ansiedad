@@ -37,6 +37,13 @@ export function Header() {
             <span className="absolute left-0 bottom-0 w-full h-0.5 bg-retro-light-text scale-x-0 group-hover:scale-x-100 transition-transform duration-200 origin-left"></span>
           </Link>
           <Link
+            href="#blog-section" // Enlace a la nueva sección del blog
+            className="text-base font-bold text-retro-light-text relative group hover:underline-offset-4 hover:underline transition-all duration-200"
+          >
+            Blog
+            <span className="absolute left-0 bottom-0 w-full h-0.5 bg-retro-light-text scale-x-0 group-hover:scale-x-100 transition-transform duration-200 origin-left"></span>
+          </Link>
+          <Link
             href="#"
             className="text-base font-bold hover:underline text-retro-light-text relative group hover:underline-offset-4 hover:underline transition-all duration-200"
           >
@@ -103,6 +110,13 @@ export function Header() {
             onClick={() => setMobileMenuOpen(false)}
           >
             Proyectos
+          </Link>
+          <Link
+            href="#blog-section" // Enlace a la nueva sección del blog
+            className="text-2xl font-bold text-retro-light-text hover:underline"
+            onClick={() => setMobileMenuOpen(false)}
+          >
+            Blog
           </Link>
           <Link
             href="#"

@@ -51,45 +51,77 @@ export const {
         password: { label: "Password", type: "password" },
       },
       async authorize(credentials) {
+        console.log("🔍 Authorize attempt with credentials:", { 
+          email: credentials?.email, 
+          hasPassword: !!credentials?.password 
+        })
+
         if (!credentials?.email || !credentials?.password) {
+          console.log("❌ Missing email or password")
           return null
         }
 
         if (!supabase) {
-          console.error("Supabase client not initialized")
+          console.error("❌ Supabase client not initialized")
           return null
         }
 
-        const { data, error } = await supabase.auth.signInWithPassword({
-          email: credentials.email as string,
-          password: credentials.password as string,
-        })
+        try {
+          console.log("🔄 Attempting Supabase signIn...")
+          const { data, error } = await supabase.auth.signInWithPassword({
+            email: credentials.email as string,
+            password: credentials.password as string,
+          })
 
-        if (error) {
-          console.error("Error signing in with credentials:", error.message)
+          if (error) {
+            console.error("❌ Supabase auth error:", error.message)
+            console.error("❌ Error details:", error)
+            return null
+          }
+
+          console.log("✅ Supabase auth successful, user:", data.user?.id)
+
+          if (data.user) {
+            try {
+              console.log("🔄 Fetching user profile...")
+              const { data: profile, error: profileError } = await supabase
+                .from("users")
+                .select("is_admin")
+                .eq("id", data.user.id)
+                .single()
+
+              if (profileError) {
+                console.error("⚠️ Error fetching user profile:", profileError.message)
+                // Continue without admin flag if profile doesn't exist
+              }
+
+              const user = {
+                id: data.user.id,
+                email: data.user.email,
+                name: data.user.email,
+                is_admin: profile?.is_admin || false,
+              }
+
+              console.log("✅ User object created:", { id: user.id, email: user.email, is_admin: user.is_admin })
+              return user
+            } catch (profileErr) {
+              console.error("❌ Profile fetch error:", profileErr)
+              // Return user without admin check if there's an error
+              return {
+                id: data.user.id,
+                email: data.user.email,
+                name: data.user.email,
+                is_admin: false,
+              }
+            }
+          }
+
+          console.log("❌ No user data returned from Supabase")
+          return null
+        } catch (authErr) {
+          console.error("❌ Unexpected auth error:", authErr)
           return null
         }
-
-        if (data.user) {
-          const { data: profile, error: profileError } = await supabase
-            .from("users")
-            .select("is_admin")
-            .eq("id", data.user.id)
-            .single()
-
-          if (profileError) {
-            console.error("Error fetching user profile:", profileError.message)
-          }
-
-          return {
-            id: data.user.id,
-            email: data.user.email,
-            name: data.user.email,
-            is_admin: profile?.is_admin || false,
-          }
-        }
-
-        return null
       },
     }),
   ],

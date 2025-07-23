@@ -3,9 +3,13 @@
 import Link from "next/link"
 import { useState } from "react"
 import { Menu, X } from "lucide-react"
+import { useSession } from "next-auth/react" // Importar useSession
 
 export function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const { data: session, status } = useSession() // Obtener la sesión del cliente
+
+  const isAdmin = session?.user?.is_admin // Verificar si el usuario es administrador
 
   return (
     <header className="border-b-2 border-retro-black bg-retro-dark-bg px-6 py-3 flex items-center justify-between relative z-50">
@@ -37,12 +41,22 @@ export function Header() {
             <span className="absolute left-0 bottom-0 w-full h-0.5 bg-retro-light-text scale-x-0 group-hover:scale-x-100 transition-transform duration-200 origin-left"></span>
           </Link>
           <Link
-            href="#blog-section" // Enlace a la nueva sección del blog
+            href="/blog" // Enlace a la nueva página del blog
             className="text-base font-bold text-retro-light-text relative group hover:underline-offset-4 hover:underline transition-all duration-200"
           >
             Blog
             <span className="absolute left-0 bottom-0 w-full h-0.5 bg-retro-light-text scale-x-0 group-hover:scale-x-100 transition-transform duration-200 origin-left"></span>
           </Link>
+          {/* Enlace de administración visible solo para administradores */}
+          {isAdmin && (
+            <Link
+              href="/admin/blog/new"
+              className="text-base font-bold text-retro-light-text relative group hover:underline-offset-4 hover:underline transition-all duration-200"
+            >
+              Crear Post
+              <span className="absolute left-0 bottom-0 w-full h-0.5 bg-retro-light-text scale-x-0 group-hover:scale-x-100 transition-transform duration-200 origin-left"></span>
+            </Link>
+          )}
           <Link
             href="#"
             className="text-base font-bold hover:underline text-retro-light-text relative group hover:underline-offset-4 hover:underline transition-all duration-200"
@@ -112,12 +126,22 @@ export function Header() {
             Proyectos
           </Link>
           <Link
-            href="#blog-section" // Enlace a la nueva sección del blog
+            href="/blog" // Enlace a la nueva página del blog
             className="text-2xl font-bold text-retro-light-text hover:underline"
             onClick={() => setMobileMenuOpen(false)}
           >
             Blog
           </Link>
+          {/* Enlace de administración visible solo para administradores en móvil */}
+          {isAdmin && (
+            <Link
+              href="/admin/blog/new"
+              className="text-2xl font-bold text-retro-light-text hover:underline"
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              Crear Post
+            </Link>
+          )}
           <Link
             href="#"
             className="text-2xl font-bold text-retro-light-text hover:underline"

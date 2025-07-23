@@ -3,13 +3,15 @@
 import { createClient } from "@supabase/supabase-js"
 import { redirect } from "next/navigation"
 
-const supabase = createClient(
-  process.env.SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!,
-  {
-    auth: { persistSession: false },
-  }
-)
+// Verificar que las variables de entorno existen
+const supabaseUrl = process.env.SUPABASE_URL
+const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY
+
+const supabase = supabaseUrl && supabaseServiceKey 
+  ? createClient(supabaseUrl, supabaseServiceKey, {
+      auth: { persistSession: false },
+    })
+  : null
 
 export async function registerUser(formData: FormData) {
   const email = formData.get("email") as string
@@ -18,6 +20,11 @@ export async function registerUser(formData: FormData) {
   if (!email || !password) {
     console.error("❌ Email y contraseña son requeridos")
     redirect("/register?error=missing-fields")
+  }
+
+  if (!supabase) {
+    console.error("❌ Supabase client not initialized - missing environment variables")
+    redirect("/register?error=service-unavailable")
   }
 
   try {

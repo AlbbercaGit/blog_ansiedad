@@ -16,7 +16,10 @@ const supabase =
       })
     : null
 
-export async function createBlogPost(formData: FormData) {
+export async function createBlogPost(
+  prevState: { success: boolean; message: string } | null,
+  formData: FormData
+): Promise<{ success: boolean; message: string }> {
   if (!supabase) {
     return { success: false, message: "Error: Cliente de Supabase no inicializado." }
   }

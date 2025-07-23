@@ -1,6 +1,6 @@
 import Image from "next/image"
 import Link from "next/link"
-import { RetroWindow } from "./retro-window"
+import { RetroWindow } from "@/components/retro-window"
 
 interface BlogPostCardProps {
   title: string

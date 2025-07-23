@@ -25,7 +25,7 @@ export async function createBlogPost(formData: FormData) {
   const slug = formData.get("slug") as string
   const description = formData.get("description") as string
   const imageUrl = formData.get("imageUrl") as string
-  const imageAlt = formData.get("imageAlt") as string // <--- NUEVO: Obtener imageAlt del formulario
+  const imageAlt = formData.get("imageAlt") as string
   const content = formData.get("content") as string
   const date = formData.get("date") as string // Asume que la fecha viene del formulario
 
@@ -40,7 +40,7 @@ export async function createBlogPost(formData: FormData) {
         slug,
         description,
         image_url: imageUrl,
-        image_alt: imageAlt, // <--- NUEVO: Insertar image_alt en la base de datos
+        image_alt: imageAlt,
         content,
         published_at: date, // Asegúrate de que el nombre de la columna coincida con tu tabla
       },

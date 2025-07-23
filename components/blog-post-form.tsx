@@ -72,7 +72,7 @@ export function BlogPostForm() {
           y pegar la URL aquí.
         </p>
       </div>
-      {/* NUEVO: Campo para el texto alternativo de la imagen */}
+      {/* Campo para el texto alternativo de la imagen */}
       <div>
         <label htmlFor="imageAlt" className="block text-sm font-medium mb-1">
           Texto Alternativo de la Imagen (opcional)

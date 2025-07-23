@@ -3,7 +3,10 @@
 import { put } from "@vercel/blob"
 import { revalidatePath } from "next/cache"
 
-export async function uploadImage(formData: FormData) {
+export async function uploadImage(
+  prevState: { success: boolean; message: string; url?: string } | null,
+  formData: FormData
+): Promise<{ success: boolean; message: string; url?: string }> {
   const file = formData.get("image") as File
 
   if (!file) {
